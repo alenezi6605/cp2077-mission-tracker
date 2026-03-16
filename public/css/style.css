@@ -454,12 +454,39 @@ body::before {
   border-left: 3px solid transparent;
   padding: 14px 16px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 26px 1fr auto;
   gap: 12px;
   align-items: center;
   transition: all 0.15s ease;
   position: relative;
   overflow: hidden;
+}
+
+/* MISSION TYPE ICON COLUMN */
+.mission-type-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mission-type-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.main-icon circle {
+  filter: drop-shadow(0 0 4px rgba(245, 230, 66, 0.6));
+}
+
+.side-icon circle {
+  filter: drop-shadow(0 0 3px rgba(200, 200, 212, 0.3));
+}
+
+.gig-icon polygon,
+.gig-icon polyline,
+.gig-icon line {
+  filter: drop-shadow(0 0 3px rgba(0, 229, 255, 0.4));
 }
 
 .mission-card::after {

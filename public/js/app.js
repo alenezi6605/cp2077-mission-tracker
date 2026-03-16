@@ -81,6 +81,28 @@ async function deleteMission(id) {
   return apiFetch(`/api/missions/${id}`, { method: 'DELETE' });
 }
 
+// ─── CATEGORY ICONS ───────────────────────────────────────────────────────────
+const CATEGORY_ICONS = {
+  // Main Job: yellow/gold filled circle with bold "i"
+  main: `<svg class="mission-type-icon main-icon" viewBox="0 0 20 20" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="9" fill="#f5e642" stroke="#c9bc1a" stroke-width="1"/>
+    <text x="10" y="15" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="700" fill="#0a0a0c">i</text>
+  </svg>`,
+  // Side Job: white/grey circle with "i"
+  side: `<svg class="mission-type-icon side-icon" viewBox="0 0 20 20" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="9" fill="#c8c8d4" stroke="#6a6a80" stroke-width="1"/>
+    <text x="10" y="15" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="700" fill="#0a0a0c">i</text>
+  </svg>`,
+  // Gig: contract/document icon
+  gig: `<svg class="mission-type-icon gig-icon" viewBox="0 0 20 20" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="4,2 13,2 16,5 16,18 4,18" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+    <polyline points="13,2 13,5 16,5" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+    <line x1="7" y1="8" x2="13" y2="8" stroke="#00e5ff" stroke-width="1"/>
+    <line x1="7" y1="11" x2="13" y2="11" stroke="#00e5ff" stroke-width="1"/>
+    <line x1="7" y1="14" x2="11" y2="14" stroke="#00e5ff" stroke-width="1"/>
+  </svg>`,
+};
+
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function renderMissions(missions) {
   updateStats(missions);
@@ -142,8 +164,9 @@ function renderCard(m) {
   const trackedMarker = m.status === 'tracked' ? '<div class="tracked-marker"></div>' : '';
 
   return `
-    <div class="mission-card" data-id="${m.id}" data-status="${m.status}">
+    <div class="mission-card" data-id="${m.id}" data-status="${m.status}" data-category="${m.category}">
       ${trackedMarker}
+      <div class="mission-type-col">${CATEGORY_ICONS[m.category]}</div>
       <div class="mission-info">
         <div class="mission-name">${escapeHtml(m.name)}</div>
         <div class="mission-meta">
