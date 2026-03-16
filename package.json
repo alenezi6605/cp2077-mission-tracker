@@ -1,0 +1,14 @@
+{
+  "name": "cp2077-mission-tracker",
+  "version": "1.0.0",
+  "description": "Cyberpunk 2077 Mission Tracker",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "express": "^4.18.3"
+  }
+}
