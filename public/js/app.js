@@ -103,12 +103,32 @@ const CATEGORY_ICONS = {
   </svg>`,
 };
 
+// ─── SORT ─────────────────────────────────────────────────────────────────────
+const CATEGORY_ORDER = { main: 0, side: 1, gig: 2 };
+
+const PRIORITY_ORDER = {
+  very_high: 0,
+  high: 1,
+  moderate: 2,
+  low: 3,
+  very_low: 4,
+};
+
+function sortMissions(missions) {
+  return [...missions].sort((a, b) => {
+    const catDiff = CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category];
+    if (catDiff !== 0) return catDiff;
+    return PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+  });
+}
+
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function renderMissions(missions) {
-  updateStats(missions);
-  updateCategoryCounts(missions);
+  const sorted = sortMissions(missions);
+  updateStats(sorted);
+  updateCategoryCounts(sorted);
 
-  if (missions.length === 0) {
+  if (sorted.length === 0) {
     content.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">&#9876;</div>
@@ -121,7 +141,7 @@ function renderMissions(missions) {
   // Group by category when showing all categories
   if (state.category === 'all') {
     const groups = { main: [], side: [], gig: [] };
-    missions.forEach(m => groups[m.category].push(m));
+    sorted.forEach(m => groups[m.category].push(m));
 
     const activeCategories = Object.entries(groups).filter(([, list]) => list.length > 0);
 
@@ -144,10 +164,10 @@ function renderMissions(missions) {
       <div class="category-section">
         <div class="category-header">
           <span class="category-name" style="color: ${CATEGORY_COLORS[state.category]}">${CATEGORY_LABELS[state.category]}</span>
-          <span class="category-count">${missions.length}</span>
+          <span class="category-count">${sorted.length}</span>
         </div>
         <div class="missions-list">
-          ${missions.map(renderCard).join('')}
+          ${sorted.map(renderCard).join('')}
         </div>
       </div>
     `;
