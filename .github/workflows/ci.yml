@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [development, main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify server starts
+        run: |
+          timeout 10 node src/server.js &
+          SERVER_PID=$!
+          sleep 3
+          curl -sf http://localhost:3000/ > /dev/null && echo "Server OK"
+          kill $SERVER_PID || true
+
+      - name: Build Docker image
+        run: docker build -t cp2077-mission-tracker:test .
