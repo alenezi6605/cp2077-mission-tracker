@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -33,3 +33,52 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t cp2077-mission-tracker:test .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            # Install Docker if not present
+            if ! command -v docker &> /dev/null; then
+              curl -fsSL https://get.docker.com | sh
+              sudo usermod -aG docker $USER
+            fi
+
+            REPO_DIR="$HOME/cp2077-mission-tracker"
+
+            # Clone or pull latest
+            if [ -d "$REPO_DIR/.git" ]; then
+              cd "$REPO_DIR"
+              git pull origin main
+            else
+              git clone https://github.com/alenezi6605/cp2077-mission-tracker.git "$REPO_DIR"
+              cd "$REPO_DIR"
+            fi
+
+            # Stop and remove existing container
+            docker stop cp2077-mission-tracker 2>/dev/null || true
+            docker rm cp2077-mission-tracker 2>/dev/null || true
+
+            # Build fresh image
+            docker build -t cp2077-mission-tracker:latest .
+
+            # Run container, persist data volume
+            docker run -d \
+              --name cp2077-mission-tracker \
+              --restart unless-stopped \
+              -p 3000:3000 \
+              -v cp2077-data:/app/data \
+              cp2077-mission-tracker:latest
+
+            echo "Deployment complete. App running on port 3000."
