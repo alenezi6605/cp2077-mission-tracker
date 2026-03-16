@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NCPD // MISSION TRACKER v2.077</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔</text></svg>">
+</head>
+<body>
+
+  <!-- Corner decorations -->
+  <div class="corner-deco tl"></div>
+  <div class="corner-deco tr"></div>
+  <div class="corner-deco bl"></div>
+  <div class="corner-deco br"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="header-logo">
+        <span class="corp-tag">// NIGHT CITY DISPATCH //</span>
+        <span class="title-main">MISSION LOG</span>
+        <span class="title-sub">Active Operations Interface</span>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-label">Active</span>
+          <span class="stat-value" id="stat-active">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Tracked</span>
+          <span class="stat-value tracked" id="stat-tracked">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value completed" id="stat-completed">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Failed</span>
+          <span class="stat-value failed" id="stat-failed">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER TABS -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-filter="all">All Missions</button>
+      <button class="nav-tab" data-filter="tracked">Tracked</button>
+      <button class="nav-tab" data-filter="active">Active</button>
+      <button class="nav-tab" data-filter="completed">Completed</button>
+      <button class="nav-tab" data-filter="failed">Failed</button>
+    </nav>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Category Filters -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Category</div>
+        <button class="filter-btn active" data-category="all">
+          <span class="dot"></span>
+          All Categories
+          <span class="count" id="count-all">0</span>
+        </button>
+        <button class="filter-btn" data-category="main">
+          <span class="dot" style="color: var(--cp-red)"></span>
+          Main Jobs
+          <span class="count" id="count-main">0</span>
+        </button>
+        <button class="filter-btn" data-category="side">
+          <span class="dot" style="color: var(--cp-yellow)"></span>
+          Side Jobs
+          <span class="count" id="count-side">0</span>
+        </button>
+        <button class="filter-btn" data-category="gig">
+          <span class="dot" style="color: var(--cp-cyan)"></span>
+          Gigs
+          <span class="count" id="count-gig">0</span>
+        </button>
+      </div>
+
+      <!-- Add Mission Panel -->
+      <div class="add-panel" id="add-panel">
+        <div class="add-panel-header" id="add-panel-toggle">
+          <span class="add-panel-title">+ New Mission</span>
+          <span class="add-panel-toggle">&#9660;</span>
+        </div>
+        <form class="add-form" id="add-form">
+          <div class="form-field">
+            <label class="form-label">Mission Name</label>
+            <input
+              type="text"
+              class="form-input"
+              id="mission-name"
+              placeholder="Enter mission name..."
+              maxlength="120"
+              required
+            >
+          </div>
+          <div class="form-field">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="mission-category">
+              <option value="main">Main Job</option>
+              <option value="side">Side Job</option>
+              <option value="gig" selected>Gig</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Priority</label>
+            <select class="form-select" id="mission-priority">
+              <option value="very_high">Very High</option>
+              <option value="high">High</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="low">Low</option>
+              <option value="very_low">Very Low</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-add">Deploy Mission</button>
+        </form>
+      </div>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content" id="content">
+      <div class="loading">LOADING MISSIONS</div>
+    </main>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
